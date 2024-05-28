@@ -1,20 +1,14 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace LibraryManagementSystem
 {
     public partial class viewBooks : Form
     {
         MySqlConnection con = new MySqlConnection("server=localhost;user id=root;database=libraryManagementSystem");
+
         // Initializing the view books window
         public viewBooks()
         {
@@ -60,30 +54,6 @@ namespace LibraryManagementSystem
             this.Hide();
         }
 
-        // Event Handler for issue books button
-        //private void issueBooksBtn_Click(object sender, EventArgs e)
-        //{
-        //  issueBooks ib = new issueBooks();
-        //  ib.Show();
-        //this.Hide();
-        //}
-
-        // Event Handler for add student button
-        //private void addStudentBtn_Click(object sender, EventArgs e)
-        //{
-        // addStudents ads = new addStudents();
-        // ads.Show();
-        //this.Hide();
-        //}
-
-        // Event Handler for view student info button
-        //private void viewStudentInfoBtn_Click(object sender, EventArgs e)
-        //{
-        // viewStudentInfo vsi = new viewStudentInfo();
-        //vsi.Show();
-        // this.Hide();
-        //}
-
         // Event Handler for exit button
         private void exitBtn_Click(object sender, EventArgs e)
         {
@@ -112,12 +82,13 @@ namespace LibraryManagementSystem
 
         }
 
-        // Event Handler for update button
-        //private void updateBtn_Click(object sender, EventArgs e)
-        //{
-        // updateBooks updateBooks = new updateBooks();
-        // updateBooks.Show();
-        //  this.Hide();
-        // }
+        // Event Handler for logout button
+        private void logoutBtn_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("You have been logged out.");
+            Login login = new Login();
+            login.Show();
+            this.Close(); // Close the current form instead of hiding it
+        }
     }
 }
