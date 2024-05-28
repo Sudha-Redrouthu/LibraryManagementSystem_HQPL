@@ -34,13 +34,13 @@
             label2 = new Label();
             label1 = new Label();
             panel2 = new Panel();
+            button5 = new Button();
             button4 = new Button();
             button3 = new Button();
             button2 = new Button();
             button1 = new Button();
             addStudentBtn = new Button();
             viewBookBtn = new Button();
-            exitBtn = new Button();
             addBookBtn = new Button();
             issueBookBtn = new Button();
             label3 = new Label();
@@ -96,18 +96,30 @@
             // panel2
             // 
             panel2.BackColor = SystemColors.GradientInactiveCaption;
+            panel2.Controls.Add(button5);
             panel2.Controls.Add(button4);
             panel2.Controls.Add(button3);
             panel2.Controls.Add(button2);
             panel2.Controls.Add(button1);
             panel2.Controls.Add(addStudentBtn);
             panel2.Controls.Add(viewBookBtn);
-            panel2.Controls.Add(exitBtn);
             panel2.Controls.Add(addBookBtn);
             panel2.Location = new Point(0, 37);
             panel2.Name = "panel2";
             panel2.Size = new Size(195, 417);
             panel2.TabIndex = 1;
+            // 
+            // button5
+            // 
+            button5.BackColor = SystemColors.GradientInactiveCaption;
+            button5.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button5.Location = new Point(12, 358);
+            button5.Name = "button5";
+            button5.Size = new Size(170, 43);
+            button5.TabIndex = 16;
+            button5.Text = "Logout";
+            button5.UseVisualStyleBackColor = false;
+            button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button4
             // 
@@ -119,7 +131,7 @@
             button4.TabIndex = 15;
             button4.Text = "Book Details";
             button4.UseVisualStyleBackColor = false;
-            button4.Click += button4_Click;
+            button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
@@ -131,7 +143,7 @@
             button3.TabIndex = 14;
             button3.Text = "View Student Info";
             button3.UseVisualStyleBackColor = false;
-            button3.Click += button3_Click;
+            button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button2
             // 
@@ -143,7 +155,7 @@
             button2.TabIndex = 13;
             button2.Text = "Return Book";
             button2.UseVisualStyleBackColor = false;
-            button2.Click += button2_Click;
+            button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -177,19 +189,7 @@
             viewBookBtn.TabIndex = 8;
             viewBookBtn.Text = "View Book";
             viewBookBtn.UseVisualStyleBackColor = false;
-            viewBookBtn.Click += viewBookBtn_Click;
-            // 
-            // exitBtn
-            // 
-            exitBtn.BackColor = Color.AliceBlue;
-            exitBtn.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            exitBtn.Location = new Point(12, 358);
-            exitBtn.Name = "exitBtn";
-            exitBtn.Size = new Size(170, 43);
-            exitBtn.TabIndex = 7;
-            exitBtn.Text = "Exit";
-            exitBtn.UseVisualStyleBackColor = false;
-            exitBtn.Click += exitBtn_Click;
+            viewBookBtn.Click += new System.EventHandler(this.viewBookBtn_Click);
             // 
             // addBookBtn
             // 
@@ -201,7 +201,7 @@
             addBookBtn.TabIndex = 2;
             addBookBtn.Text = "Add Book";
             addBookBtn.UseVisualStyleBackColor = false;
-            addBookBtn.Click += addBookBtn_Click;
+            addBookBtn.Click += new System.EventHandler(this.addBookBtn_Click);
             // 
             // issueBookBtn
             // 
@@ -265,7 +265,6 @@
         private Label label1;
         private Panel panel2;
         private Button viewBookBtn;
-        private Button exitBtn;
         private Button addBookBtn;
         private Button addStudentBtn;
         private Button issueBookBtn;
@@ -275,5 +274,6 @@
         private Button button3;
         private Button button2;
         private Button button4;
+        private Button button5;
     }
 }

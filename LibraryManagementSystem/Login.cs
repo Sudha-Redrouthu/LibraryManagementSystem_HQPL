@@ -1,12 +1,14 @@
 using MySql.Data.MySqlClient;
-using System.CodeDom;
+using System;
+using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace LibraryManagementSystem
 {
     public partial class Login : Form
     {
-
         MySqlConnection con = new MySqlConnection("server=localhost;user id=root;database=libraryManagementSystem");
+
         // Initializing login page
         public Login()
         {
@@ -23,6 +25,13 @@ namespace LibraryManagementSystem
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("No empty space allowed");
+                return;
+            }
+
+            string passwordValidationResult = ValidatePassword(password);
+            if (!string.IsNullOrEmpty(passwordValidationResult))
+            {
+                MessageBox.Show(passwordValidationResult);
                 return;
             }
 
@@ -45,7 +54,7 @@ namespace LibraryManagementSystem
                         }
                         else
                         {
-                            MessageBox.Show("You have entered an invalid password. Please try again !");
+                            MessageBox.Show("You have entered an invalid password. Please try again!");
                         }
                     }
                     else
@@ -54,6 +63,24 @@ namespace LibraryManagementSystem
                     }
                 }
             }
+        }
+
+        private string ValidatePassword(string password)
+        {
+            if (password.Length < 8)
+                return "Password must be at least 8 characters long.";
+            if (password.Length > 16)
+                return "Password must be no longer than 16 characters.";
+            if (!Regex.IsMatch(password, @"[A-Z]"))
+                return "Password must contain at least one uppercase letter.";
+            if (!Regex.IsMatch(password, @"[a-z]"))
+                return "Password must contain at least one lowercase letter.";
+            if (!Regex.IsMatch(password, @"[0-9]"))
+                return "Password must contain at least one numeric digit.";
+            if (!Regex.IsMatch(password, @"[\W_]"))
+                return "Password must contain at least one special character.";
+
+            return string.Empty;
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)

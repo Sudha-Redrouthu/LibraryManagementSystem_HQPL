@@ -1,41 +1,55 @@
 ﻿using MySql.Data.MySqlClient;
-
+using System;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace LibraryManagementSystem
 {
     public partial class addBooks : Form
     {
         MySqlConnection con = new MySqlConnection("server=localhost;user id=root;database=libraryManagementSystem");
-        //Initializing add books window
+
+        // Initializing add books window
         public addBooks()
         {
             InitializeComponent();
         }
 
-        //Event Handler for save button 
+        // Event Handler for save button 
         private void saveBtn_Click(object sender, EventArgs e)
         {
             // Validate input fields
             if (ValidateInput())
             {
-                DBAccess db = new DBAccess();
-                string query = "INSERT INTO book(book_name,ISBN,author,publisher,category,price,quantity) VALUES ('" + bookName.Text + "','" + isbn.Text + "','" + author.Text + "','" + publisher.Text + "','" + category.Text + "','" + Convert.ToDouble(price.Text) + "','" + Convert.ToInt64(qty.Text) + "')";
-                db.insertData(query);
-
+                if (IsDuplicateBook())
+                {
+                    MessageBox.Show("Duplicate book information found. Please enter unique book details.");
+                    return;
+                }
 
                 try
                 {
-                    MessageBox.Show("You have succesfully added the book details");
-                    bookName.Text = "";
-                    isbn.Text = "";
-                    author.Text = "";
-                    publisher.Text = "";
-                    category.Text = "";
-                    price.Text = "";
-                    qty.Text = "";
-                }
+                    con.Open();
+                    string query = "INSERT INTO book(book_name, ISBN, author, publisher, category, price, quantity) VALUES (@bookName, @isbn, @auth, @publisher, @category, @price, @quantity)";
+                    MySqlCommand cmd = new MySqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@bookName", bookName.Text);
+                    cmd.Parameters.AddWithValue("@isbn", isbn.Text);
+                    cmd.Parameters.AddWithValue("@auth", author.Text);
+                    cmd.Parameters.AddWithValue("@publisher", publisher.Text);
+                    cmd.Parameters.AddWithValue("@category", category.Text);
+                    cmd.Parameters.AddWithValue("@price", Convert.ToDouble(price.Text));
+                    cmd.Parameters.AddWithValue("@quantity", Convert.ToInt64(qty.Text));
 
-                catch (Exception ex) { MessageBox.Show(ex.Message); }
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+
+                    MessageBox.Show("You have successfully added the book details");
+                    ClearFields();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
 
@@ -56,24 +70,70 @@ namespace LibraryManagementSystem
                 return false; // Validation failed
             }
 
-            // Validate that price is a valid numeric value
-            if (!double.TryParse(price.Text, out _))
+            // Validate ISBN is numeric
+            if (!Regex.IsMatch(isbn.Text, @"^\d+$"))
             {
-                // Display an error message if price is not a valid numeric value
-                MessageBox.Show("Please enter a valid price.");
-                return false; // Validation failed
+                MessageBox.Show("ISBN should be numeric.");
+                return false;
             }
 
-            // Validate that quantity is a valid numeric value
-            if (!double.TryParse(qty.Text, out _))
+            // Validate book name contains only alphabets
+            if (!Regex.IsMatch(bookName.Text, @"^[A-Za-z\s]+$"))
             {
-                // Display an error message if quantity is not a valid numeric value
+                MessageBox.Show("Book name should contain only alphabets.");
+                return false;
+            }
+
+            // Validate price is a valid numeric value
+            if (!double.TryParse(price.Text, out _))
+            {
+                MessageBox.Show("Please enter a valid price.");
+                return false;
+            }
+
+            // Validate quantity is a valid numeric value
+            if (!int.TryParse(qty.Text, out _))
+            {
                 MessageBox.Show("Please enter a valid quantity.");
-                return false; // Validation failed
+                return false;
+            }
+
+            // Validate author name contains first name and last name
+            var authorParts = author.Text.Split(' ');
+            if (authorParts.Length < 2)
+            {
+                MessageBox.Show("Author name should contain first name and last name.");
+                return false;
             }
 
             // All validation checks passed
-            return true; // Validation succeeded
+            return true;
+        }
+
+        private bool IsDuplicateBook()
+        {
+            string query = "SELECT COUNT(*) FROM book WHERE book_name = @bookName AND ISBN = @isbn AND author = @auth";
+            MySqlCommand cmd = new MySqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@bookName", bookName.Text);
+            cmd.Parameters.AddWithValue("@isbn", isbn.Text);
+            cmd.Parameters.AddWithValue("@auth", author.Text);
+
+            con.Open();
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            con.Close();
+
+            return count > 0;
+        }
+
+        private void ClearFields()
+        {
+            bookName.Text = "";
+            isbn.Text = "";
+            author.Text = "";
+            publisher.Text = "";
+            category.Text = "";
+            price.Text = "";
+            qty.Text = "";
         }
 
         // Event Handler for view books button
@@ -83,30 +143,6 @@ namespace LibraryManagementSystem
             vb.Show();
             this.Hide();
         }
-
-        // Event Handler for issue books button
-        // private void issueBookBtn_Click(object sender, EventArgs e)
-        //{
-        //  issueBooks ib = new issueBooks();
-        //ib.Show();
-        //this.Hide();
-        // }
-
-        // Event Handler for add student button
-        //private void addStudentBtn_Click(object sender, EventArgs e)
-        //{
-        // addStudents addStudents = new addStudents();
-        //addStudents.Show();
-        //this.Hide();
-        //}
-
-        // Event Handler for view student info button
-        //private void viewStudentInfoBtn_Click(object sender, EventArgs e)
-        //{
-        // viewStudentInfo vsi = new viewStudentInfo();
-        //vsi.Show();
-        //this.Hide();
-        //}
 
         // Event Handler for exit button
         private void exitBtn_Click(object sender, EventArgs e)
@@ -119,13 +155,7 @@ namespace LibraryManagementSystem
         // Event Handler for clear button
         private void clearBtn_Click(object sender, EventArgs e)
         {
-            bookName.Text = "";
-            isbn.Text = "";
-            author.Text = "";
-            publisher.Text = "";
-            category.Text = "";
-            price.Text = "";
-            qty.Text = "";
+            ClearFields();
         }
 
         // Event Handler for cancel button
@@ -144,6 +174,15 @@ namespace LibraryManagementSystem
         private void button1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        // Event Handler for logout button
+        private void logoutBtn_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("You have been logged out.");
+            Login login = new Login();
+            login.Show();
+            this.Close(); // Close the current form instead of hiding it
         }
     }
 }

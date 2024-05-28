@@ -42,7 +42,6 @@
             button5 = new Button();
             viewStudentInfoBtn = new Button();
             addStudentBtn = new Button();
-            exitBtn = new Button();
             panel3 = new Panel();
             label3 = new Label();
             textBox1 = new TextBox();
@@ -53,6 +52,7 @@
             clearBtn = new Button();
             searchBtn = new Button();
             label4 = new Label();
+            button4 = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel2.SuspendLayout();
@@ -107,6 +107,7 @@
             // panel2
             // 
             panel2.BackColor = SystemColors.GradientInactiveCaption;
+            panel2.Controls.Add(button4);
             panel2.Controls.Add(button3);
             panel2.Controls.Add(button2);
             panel2.Controls.Add(button1);
@@ -114,7 +115,6 @@
             panel2.Controls.Add(button5);
             panel2.Controls.Add(viewStudentInfoBtn);
             panel2.Controls.Add(addStudentBtn);
-            panel2.Controls.Add(exitBtn);
             panel2.Location = new Point(0, 37);
             panel2.Name = "panel2";
             panel2.Size = new Size(195, 417);
@@ -199,18 +199,6 @@
             addStudentBtn.TabIndex = 10;
             addStudentBtn.Text = "Issue Book";
             addStudentBtn.UseVisualStyleBackColor = false;
-            // 
-            // exitBtn
-            // 
-            exitBtn.BackColor = Color.AliceBlue;
-            exitBtn.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            exitBtn.Location = new Point(12, 358);
-            exitBtn.Name = "exitBtn";
-            exitBtn.Size = new Size(170, 43);
-            exitBtn.TabIndex = 7;
-            exitBtn.Text = "Exit";
-            exitBtn.UseVisualStyleBackColor = false;
-            exitBtn.Click += exitBtn_Click;
             // 
             // panel3
             // 
@@ -323,6 +311,17 @@
             label4.TabIndex = 8;
             label4.Text = "Book Name / ISBN :";
             // 
+            // button4
+            // 
+            button4.BackColor = SystemColors.GradientInactiveCaption;
+            button4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button4.Location = new Point(12, 358);
+            button4.Name = "button4";
+            button4.Size = new Size(170, 43);
+            button4.TabIndex = 17;
+            button4.Text = "Logout";
+            button4.UseVisualStyleBackColor = false;
+            // 
             // viewBooks
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -357,7 +356,6 @@
         private Label label2;
         private Label label1;
         private Panel panel2;
-        private Button exitBtn;
         private Button addStudentBtn;
         private Button issueBooksBtn;
         private Button viewStudentInfoBtn;
@@ -384,5 +382,6 @@
         private Button button2;
         private Button button1;
         private Button button3;
+        private Button button4;
     }
 }
